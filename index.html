@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портал для підготовки майбутніх магістрів</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Портал магістра</h1>
+                </div>
+                <nav class="nav-menu">
+                    <button class="nav-btn" onclick="showSection('home', this)">
+                        <i class="fas fa-home"></i> Головна
+                    </button>
+                    <button class="nav-btn" onclick="showSection('test', this)">
+                        <i class="fas fa-question-circle"></i> Тестування
+                    </button>
+                    <button class="nav-btn" onclick="showSection('stats', this)">
+                        <i class="fas fa-chart-bar"></i> Статистика
+                    </button>
+                    <button class="nav-btn" onclick="showSection('profile', this)">
+                        <i class="fas fa-user"></i> Профіль
+                    </button>
+                </nav>
+                <div class="user-info">
+                    <span id="user-name">Гість</span>
+                    <button id="login-btn" onclick="showLoginModal()">Увійти</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="home-section" class="section active">
+                <div class="hero">
+                    <h2>Підготовка до іспитів з конституційного права</h2>
+                    <p>Інтерактивний портал для тестування та підготовки майбутніх магістрів</p>
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <i class="fas fa-book"></i>
+                            <div>
+                                <h3 id="total-questions">25</h3>
+                                <p>Питань у базі</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h3 id="total-users">0</h3>
+                                <p>Користувачів</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-trophy"></i>
+                            <div>
+                                <h3 id="avg-score">0%</h3>
+                                <p>Середній бал</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="cta-button" onclick="startTest()">
+                        <i class="fas fa-play"></i> Розпочати тестування
+                    </button>
+                </div>
+            </section>
+
+            <!-- Test Section -->
+            <section id="test-section" class="section">
+                <div class="test-container">
+                    <div class="test-header">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="test-info">
+                            <span id="question-counter">Питання 1 з 25</span>
+                            <span id="timer">00:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="question-container" id="question-container">
+                        <div class="question-text" id="question-text"></div>
+                        <div class="answers-container" id="answers-container"></div>
+                        <div class="test-controls">
+                            <button class="btn-secondary" onclick="previousQuestion()" id="prev-btn" disabled>
+                                <i class="fas fa-arrow-left"></i> Попереднє
+                            </button>
+                            <button class="btn-primary" onclick="nextQuestion()" id="next-btn">
+                                Наступне <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <button class="btn-success" onclick="finishTest()" id="finish-btn" style="display: none;">
+                                <i class="fas fa-check"></i> Завершити
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section id="stats-section" class="section">
+                <div class="stats-container">
+                    <h2>Ваша статистика</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <i class="fas fa-clipboard-check"></i>
+                            <div>
+                                <h3 id="tests-completed">0</h3>
+                                <p>Тестів завершено</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-percentage"></i>
+                            <div>
+                                <h3 id="success-rate">0%</h3>
+                                <p>Рівень успішності</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h3 id="avg-time">00:00</h3>
+                                <p>Середній час</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-fire"></i>
+                            <div>
+                                <h3 id="streak">0</h3>
+                                <p>Днів поспіль</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-results">
+                        <h3>Останні результати</h3>
+                        <div id="recent-results-list"></div>
+                    </div>
+                    
+                    <div class="leaderboard">
+                        <h3>Таблиця лідерів</h3>
+                        <div id="leaderboard-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="section">
+                <div class="profile-container">
+                    <h2>Профіль користувача</h2>
+                    <div class="profile-info">
+                        <div class="avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <h3 id="profile-name">Гість</h3>
+                            <p id="profile-email">Не авторизовано</p>
+                            <button class="btn-primary" onclick="showLoginModal()">
+                                <i class="fas fa-sign-in-alt"></i> Увійти
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="achievements">
+                        <h3>Досягнення</h3>
+                        <div class="achievement-list">
+                            <div class="achievement locked">
+                                <i class="fas fa-medal"></i>
+                                <div>
+                                    <h4>Перший тест</h4>
+                                    <p>Завершіть перше тестування</p>
+                                </div>
+                            </div>
+                            <div class="achievement locked">
+                                <i class="fas fa-star"></i>
+                                <div>
+                                    <h4>Ідеальний результат</h4>
+                                    <p>Отримайте 100% правильних відповідей</p>
+                                </div>
+                            </div>
+                            <div class="achievement locked">
+                                <i class="fas fa-crown"></i>
+                                <div>
+                                    <h4>Магістр права</h4>
+                                    <p>Завершіть 10 тестів з результатом >90%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Results Modal -->
+        <div id="results-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Результати тестування</h2>
+                    <button class="close-btn" onclick="closeModal('results-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="result-summary">
+                        <div class="score-circle">
+                            <span id="final-score">0%</span>
+                        </div>
+                        <div class="result-details">
+                            <p><strong>Правильних відповідей:</strong> <span id="correct-count">0</span> з <span id="total-count">0</span></p>
+                            <p><strong>Час виконання:</strong> <span id="total-time">00:00</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="error-analysis">
+                        <h3>Аналіз помилок</h3>
+                        <div id="error-list"></div>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>Рекомендації</h3>
+                        <div id="recommendations-content"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeModal('results-modal')">Закрити</button>
+                    <button class="btn-primary" onclick="startTest()">
+                        <i class="fas fa-redo"></i> Пройти знову
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Вхід в систему</h2>
+                    <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="username">Ім'я користувача:</label>
+                            <input type="text" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Пароль:</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Увійти
+                        </button>
+                    </form>
+                    <div class="register-link">
+                        <p>Ще не маєте акаунту? <a href="#" onclick="showRegisterModal()">Зареєструватися</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div id="register-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Реєстрація</h2>
+                    <button class="close-btn" onclick="closeModal('register-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="reg-username">Ім'я користувача:</label>
+                            <input type="text" id="reg-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-email">Email:</label>
+                            <input type="email" id="reg-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Пароль:</label>
+                            <input type="password" id="reg-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-confirm">Підтвердіть пароль:</label>
+                            <input type="password" id="reg-confirm" required>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-user-plus"></i> Зареєструватися
+                        </button>
+                    </form>
+                    <div class="login-link">
+                        <p>Вже маєте акаунт? <a href="#" onclick="showLoginModal()">Увійти</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
